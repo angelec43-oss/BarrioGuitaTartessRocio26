@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barrio de la Guita | Tartessos y Rocío</title>
+    
+    <link rel="icon" type="image/png" href="favicon.png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3 { font-family: 'Montserrat', sans-serif; }
+
+        /* EFECTO DE APARICIÓN SUAVE */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* TARJETAS ESTILO PREMIUM */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* EFECTO PARALLAX OPTIMIZADO */
+        #parallax-bg {
+            will-change: transform;
+            transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* ANIMACIÓN REPRODUCTOR */
+        @keyframes pulse-blue {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        .music-active { animation: pulse-blue 2s infinite; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+
+    <div id="music-container" class="fixed bottom-6 right-6 z-50 flex items-center gap-4 glass-card p-3 rounded-2xl shadow-2xl reveal">
+        <button id="toggle-music" class="w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-xl shadow-lg hover:bg-blue-700 transition-all active:scale-90">
+            <svg id="play-icon" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg id="pause-icon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+        </button>
+        <div class="pr-4 border-l pl-4 border-slate-200">
+            <span class="text-[10px] font-bold uppercase tracking-tighter text-blue-600 block">Hilo Musical</span>
+            <select id="track-select" class="text-xs font-semibold bg-transparent outline-none cursor-pointer text-slate-700">
+                <option value="track1">🌴 Golden Palms</option>
+                <option value="track2">☀️ High Noon</option>
+                <option value="track3">✨ Special Track</option>
+            </select>
+        </div>
+        <audio id="audio-track1" loop><source src="track1.mp3" type="audio/mpeg"></audio>
+        <audio id="audio-track2" loop><source src="track2.mp3" type="audio/mpeg"></audio>
+        <audio id="audio-track3" loop><source src="track3.mp3" type="audio/mpeg"></audio>
+    </div>
+
+    <header id="hero" class="relative h-[85vh] flex items-center justify-center text-center text-white overflow-hidden shadow-2xl">
+        <div class="absolute inset-0">
+            <img id="parallax-bg" src="portada.jpg" alt="Portada Barrio" class="w-full h-full object-cover scale-110">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-slate-900/95"></div>
+        </div>
+        <div class="relative z-10 px-6">
+            <div class="reveal inline-block px-4 py-1 bg-blue-600/80 rounded-full text-[10px] font-black uppercase tracking-widest mb-6 text-white">Nuestra Comunidad</div>
+            <h1 class="reveal text-5xl md:text-8xl font-black mb-4 tracking-tighter uppercase drop-shadow-2xl text-white">Barrio de la Guita</h1>
+            <p class="reveal text-lg md:text-2xl italic font-light text-blue-100 mb-10 max-w-2xl mx-auto">"Tartessos y Rocío: Compartiendo la belleza de nuestra tierra"</p>
+            <button onclick="window.open('https://www.facebook.com/groups/232838491302482', '_blank')" 
+                class="reveal bg-white text-blue-700 hover:bg-blue-50 px-12 py-5 rounded-full font-black text-lg shadow-2xl transition-all transform hover:scale-105 active:scale-95">
+                IR AL GRUPO DE FACEBOOK
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-6 -mt-20 relative z-20 pb-32">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
+            <div onclick="openModal('queja')" class="reveal glass-card p-10 rounded-[2.5rem] text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-red-50 text-red-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-red-600 group-hover:text-white transition-all text-2xl">📝</div>
+                <h3 class="text-2xl font-black mb-2 uppercase tracking-tight text-slate-900">Quejas</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed">Envía tus reportes para mejorar el barrio.</p>
+            </div>
+            <div onclick="openModal('sugerencia')" class="reveal glass-card p-10 rounded-[2.5rem] text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-blue-600 group-hover:text-white transition-all text-2xl">💡</div>
+                <h3 class="text-2xl font-black mb-2 uppercase tracking-tight text-slate-900">Sugerencias</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed">Tus ideas construyen nuestra comunidad.</p>
+            </div>
+            <div onclick="openModal('foto')" class="reveal glass-card p-10 rounded-[2.5rem] text-center cursor-pointer group">
+                <div class="w-16 h-16 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-purple-600 group-hover:text-white transition-all text-2xl">📸</div>
+                <h3 class="text-2xl font-black mb-2 uppercase tracking-tight text-slate-900">Enviar Foto</h3>
+                <p class="text-slate-500 text-sm font-medium leading-relaxed">Comparte tus mejores vistas del barrio.</p>
+            </div>
+        </section>
+
+        <section class="reveal bg-slate-900 rounded-[3rem] p-16 text-center text-white shadow-2xl mb-24 relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 class="text-4xl font-black mb-6 uppercase tracking-tighter text-white">¿Quieres ayudar a crecer nuestro barrio?</h2>
+                <p class="text-slate-400 mb-12 max-w-2xl mx-auto font-medium text-lg italic">Buscamos vecinos auténticos para gestionar nuestra comunidad digital.</p>
+                <div class="flex flex-wrap justify-center gap-6">
+                    <button onclick="openRoleModal('Moderador')" class="px-10 py-4 bg-blue-600 hover:bg-blue-700 rounded-2xl font-black text-sm uppercase transition-all shadow-xl hover:-translate-y-1 text-white">Quiero ser Moderador</button>
+                    <button onclick="openRoleModal('Administrador')" class="px-10 py-4 bg-white text-slate-900 hover:bg-slate-100 rounded-2xl font-black text-sm uppercase transition-all shadow-xl hover:-translate-y-1">Quiero ser Administrador</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-md z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-[2.5rem] max-w-md w-full p-10 shadow-2xl">
+            <h3 id="modalTitle" class="text-3xl font-black mb-8 uppercase text-slate-900 tracking-tighter text-center"></h3>
+            <form id="contactForm" class="space-y-5">
+                <input type="text" id="nameInput" required placeholder="Tu Nombre" class="w-full p-5 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-semibold text-slate-800">
+                <textarea id="messageInput" rows="4" placeholder="Escribe tu mensaje..." class="w-full p-5 bg-slate-100 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition-all font-semibold text-slate-800"></textarea>
+                <div id="photoArea" class="hidden p-6 border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50">
+                    <p class="text-[10px] font-black uppercase text-slate-400 mb-3">Adjuntar imagen:</p>
+                    <input type="file" id="fileInput" accept="image/*" class="text-xs font-bold text-slate-500">
+                </div>
+                <button type="submit" class="w-full py-5 bg-blue-600 text-white font-black rounded-2xl shadow-xl hover:bg-blue-700 transition-all text-lg">ENVIAR</button>
+                <button type="button" onclick="closeModal()" class="w-full text-slate-400 text-xs font-black mt-2 tracking-widest uppercase text-center">Cerrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="roleModal" class="hidden fixed inset-0 bg-slate-900/95 backdrop-blur-xl z-[110] flex items-center justify-center p-4 text-slate-800">
+        <div class="bg-white rounded-[3rem] shadow-2xl max-w-xl w-full p-10 md:p-14 overflow-y-auto max-h-[90vh]">
+            <h3 id="roleTitle" class="text-3xl font-black mb-4 uppercase text-slate-900 tracking-tighter text-center"></h3>
+            <p class="text-slate-500 mb-10 text-center font-medium italic">Responde este breve cuestionario para validar tu perfil de vecino.</p>
+            <form id="roleForm" class="space-y-6">
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-400 block mb-2 ml-2 tracking-widest">1. ¿En qué año naciste?</label>
+                    <input type="text" id="q-year" required class="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-blue-500 outline-none font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-400 block mb-2 ml-2 tracking-widest">2. ¿En qué calle vivías?</label>
+                    <input type="text" id="q-street" required class="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-blue-500 outline-none font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-400 block mb-2 ml-2 tracking-widest">3. Nombra a un vecino del grupo:</label>
+                    <input type="text" id="q-neighbor" required class="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-blue-500 outline-none font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-400 block mb-2 ml-2 tracking-widest">4. ¿Conoces las normas del grupo?</label>
+                    <select id="q-rules" class="w-full p-5 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-blue-500 outline-none font-semibold appearance-none text-slate-800">
+                        <option>Sí, las conozco y las respeto</option>
+                        <option>Las he leído</option>
+                    </select>
+                </div>
+                <div id="adminQuestion" class="hidden p-6 bg-blue-50 rounded-3xl border border-blue-100">
+                    <label class="text-[10px] font-black uppercase text-blue-600 block mb-2 ml-2 tracking-widest">5. ¿Cuánto tiempo llevas como moderador?</label>
+                    <input type="text" id="q-time" class="w-full p-5 bg-white rounded-2xl border-2 border-transparent focus:border-blue-500 outline-none font-semibold text-slate-800">
+                </div>
+                <button type="submit" class="w-full py-6 bg-slate-900 text-white font-black rounded-2xl shadow-2xl hover:bg-blue-600 transition-all text-xl uppercase tracking-tighter">Enviar Solicitud</button>
+                <button type="button" onclick="closeRoleModal()" class="w-full text-slate-400 text-[10px] font-black uppercase tracking-widest mt-2 text-center">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="bg-slate-900 text-white py-24 text-center border-t border-slate-800">
+        <h4 class="text-4xl font-black mb-4 uppercase tracking-tighter text-white">Barrio de la Guita</h4>
+        <p class="text-slate-500 text-sm font-medium tracking-widest uppercase">© 2026 · Tartessos y Rocío · Huelva 🌊</p>
+    </footer>
+
+    <script>
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            reveals.forEach(el => {
+                if (el.getBoundingClientRect().top < window.innerHeight - 80) el.classList.add("active");
+            });
+        }
+        window.addEventListener("scroll", reveal);
+        window.addEventListener("load", reveal);
+
+        const hero = document.getElementById('hero');
+        const bg = document.getElementById('parallax-bg');
+        hero.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 30;
+            const y = (e.clientY / window.innerHeight - 0.5) * 30;
+            bg.style.transform = `scale(1.1) translate(${x}px, ${y}px)`;
+        });
+
+        const musicBtn = document.getElementById('toggle-music');
+        const audioNodes = { track1: document.getElementById('audio-track1'), track2: document.getElementById('audio-track2'), track3: document.getElementById('audio-track3') };
+        const select = document.getElementById('track-select');
+        let currentAudio = audioNodes.track1;
+
+        musicBtn.addEventListener('click', () => {
+            if (currentAudio.paused) {
+                currentAudio.play();
+                document.getElementById('play-icon').classList.add('hidden');
+                document.getElementById('pause-icon').classList.remove('hidden');
+                musicBtn.classList.add('music-active');
+            } else {
+                currentAudio.pause();
+                document.getElementById('play-icon').classList.remove('hidden');
+                document.getElementById('pause-icon').classList.add('hidden');
+                musicBtn.classList.remove('music-active');
+            }
+        });
+
+        select.addEventListener('change', () => {
+            const isPlaying = !currentAudio.paused;
+            currentAudio.pause(); currentAudio.currentTime = 0;
+            currentAudio = audioNodes[select.value];
+            if (isPlaying) currentAudio.play();
+        });
+
+        function openModal(type) {
+            const title = document.getElementById('modalTitle');
+            const photoArea = document.getElementById('photoArea');
+            if (type === 'queja') title.textContent = "📝 Nueva Queja";
+            if (type === 'sugerencia') title.textContent = "💡 Sugerencia";
+            if (type === 'foto') {
+                title.textContent = "📸 Enviar Foto";
+                photoArea.classList.remove('hidden');
+            } else {
+                photoArea.classList.add('hidden');
+            }
+            document.getElementById('modal').classList.remove('hidden');
+        }
+        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
+
+        function openRoleModal(role) {
+            document.getElementById('roleTitle').textContent = "Ser " + role;
+            document.getElementById('adminQuestion').classList.toggle('hidden', role !== 'Administrador');
+            document.getElementById('roleModal').classList.remove('hidden');
+        }
+        function closeRoleModal() { document.getElementById('roleModal').classList.add('hidden'); }
+
+        document.getElementById('contactForm').onsubmit = (e) => {
+            e.preventDefault();
+            const body = `Nombre: ${document.getElementById('nameInput').value}%0AMensaje: ${document.getElementById('messageInput').value}`;
+            window.location.href = `mailto:angelec43@gmail.com?subject=${document.getElementById('modalTitle').textContent}&body=${body}`;
+            closeModal();
+        };
+
+        document.getElementById('roleForm').onsubmit = (e) => {
+            e.preventDefault();
+            const role = document.getElementById('roleTitle').textContent;
+            let body = `Solicitud para ${role}%0A1. Año: ${document.getElementById('q-year').value}%0A2. Calle: ${document.getElementById('q-street').value}%0A3. Vecino: ${document.getElementById('q-neighbor').value}%0A4. Normas: ${document.getElementById('q-rules').value}`;
+            if (role.includes('Administrador')) body += `%0A5. Tiempo Mod: ${document.getElementById('q-time').value}`;
+            window.location.href = `mailto:angelec43@gmail.com?subject=Solicitud de Equipo&body=${body}`;
+            closeRoleModal();
+        };
+    </script>
+</body>
+</html>
